@@ -10,6 +10,7 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
+// Get all events
 router.get('/', async (req, res) => {
   try {
     const events = await prisma.event.findMany({
@@ -17,10 +18,12 @@ router.get('/', async (req, res) => {
     });
     res.json(events);
   } catch (error) {
+    console.error("🚨 GET /api/events error:", error); // <-- Better debugging
     res.status(500).json({ error: 'Failed to fetch events' });
   }
 });
 
+// Create a new event
 router.post('/', async (req, res) => {
   try {
     const { title, description, venue_id, datetime, capacity } = req.body;
@@ -35,6 +38,7 @@ router.post('/', async (req, res) => {
     });
     res.status(201).json(newEvent);
   } catch (error) {
+    console.error("🚨 POST /api/events error:", error); // <-- Better debugging
     res.status(500).json({ error: 'Failed to create event' });
   }
 });

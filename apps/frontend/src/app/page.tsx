@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import BookingButton from '@/components/ui/BookingButton'; 
 
 // Define the TypeScript interface for our Event data
 interface Event {
@@ -18,14 +19,14 @@ interface Event {
 
 async function getEvents(): Promise<Event[]> {
   try {
-    const res = await fetch('http://localhost:8000/api/events', { 
-      cache: 'no-store' 
+    const res = await fetch('http://localhost:8000/api/events', {
+      cache: 'no-store'
     });
-    
+
     if (!res.ok) {
       throw new Error('Failed to fetch events');
     }
-    
+
     return res.json();
   } catch (error) {
     console.error("Error fetching events:", error);
@@ -102,7 +103,7 @@ export default async function Home() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">Book Tickets</Button>
+                  <BookingButton eventId={event.id} />
                 </CardFooter>
               </Card>
             ))}
