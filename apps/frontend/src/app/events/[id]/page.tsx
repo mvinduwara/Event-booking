@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import BookingButton from "@/components/ui/BookingButton";
 import Link from "next/link";
+import Image from "next/image"; 
 
 async function getEventDetails(id: string) {
   try {
@@ -15,7 +15,9 @@ async function getEventDetails(id: string) {
   }
 }
 
+// FIXED: params is a Promise that must be awaited
 export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
+  // Unwrap the params promise
   const resolvedParams = await params;
   
   const event = await getEventDetails(resolvedParams.id);
@@ -27,13 +29,20 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
-      <nav className="p-6 border-b bg-white">
-        <Link href="/" className="text-primary font-medium">← Back to Events</Link>
+      <nav className="p-6 border-b bg-white shadow-sm">
+        <Link href="/" className="text-primary font-medium hover:underline">← Back to Events</Link>
       </nav>
+
+      {/* Added Image support here so the details page also shows your uploaded banner! */}
+      {event.image_url && (
+        <div className="w-full h-64 md:h-96 relative bg-slate-200">
+          <Image src={event.image_url} alt={event.title} fill className="object-cover" />
+        </div>
+      )}
 
       <div className="max-w-5xl mx-auto px-6 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
         <div className="md:col-span-2 space-y-6">
-          <Badge variant="outline" className="mb-2">Confirmed Event</Badge>
+          <Badge variant="outline" className="mb-2 bg-white">Confirmed Event</Badge>
           <h1 className="text-4xl font-extrabold tracking-tight">{event.title}</h1>
           
           <div className="flex items-center text-slate-500 space-x-4 py-2">
@@ -41,8 +50,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             <span>📍 {event.venue?.name || "TBD"}</span>
           </div>
 
-          <div className="prose prose-slate max-w-none">
-            <h3 className="text-xl font-bold">About this event</h3>
+          <div className="prose prose-slate max-w-none bg-white p-6 rounded-xl border">
+            <h3 className="text-xl font-bold mb-4">About this event</h3>
             <p className="text-slate-600 leading-relaxed">{event.description}</p>
           </div>
 
@@ -69,8 +78,9 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               
               <BookingButton eventId={event.id} userEmail={session?.user?.email} />
               
-              <p className="text-xs text-center text-slate-400">
-                Secure your spot instantly. {session ? 'Logged in securely.' : 'Requires sign in.'}
+              <p className="text-xs text-center text-slate-400 mt-4">
+                Secure your spot instantly. <br/>
+                {session ? 'Logged in securely.' : 'Requires sign in.'}
               </p>
             </div>
           </div>

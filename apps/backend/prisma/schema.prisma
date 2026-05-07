@@ -19,10 +19,12 @@ model Event {
   title       String
   description String
   venue_id    String
+  category_id String?
   datetime    DateTime
   capacity    Int
   image_url   String?
   venue       Venue     @relation(fields: [venue_id], references: [id])
+  category    Category? @relation(fields: [category_id], references: [id])
   bookings    Booking[]
 }
 
@@ -60,4 +62,5 @@ model Category {
   id          String  @id @default(uuid())
   name        String  @unique
   description String?
+  events      Event[]
 }

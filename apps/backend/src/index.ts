@@ -11,14 +11,13 @@ import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import uploadRoutes from './routes/upload';
 import path from 'path';
+import categoryRoutes from './routes/categories';
 
-// Import all service routes
 import eventRoutes from './routes/events';
 import bookingRoutes from './routes/bookings';
 import venueRoutes from './routes/venues';
 import userRoutes from './routes/users';
 
-// Database setup
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
@@ -41,6 +40,7 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/venues', venueRoutes);
 app.use('/api/users', userRoutes); 
 app.use('/api/upload', uploadRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is successfully running on port ${PORT}`);
