@@ -1,4 +1,3 @@
-// apps/frontend/src/components/ui/BookingButton.tsx
 "use client";
 
 import { useState } from 'react';
@@ -7,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 interface BookingButtonProps {
   eventId: string;
-  userEmail?: string | null; // Added prop for real session data
+  userEmail?: string | null; 
 }
 
 export default function BookingButton({ eventId, userEmail }: BookingButtonProps) {
@@ -16,7 +15,6 @@ export default function BookingButton({ eventId, userEmail }: BookingButtonProps
   const router = useRouter();
 
   const handleBooking = async () => {
-    // 1. Security Check: Ensure user is logged in
     if (!userEmail) {
       router.push('/auth/signin');
       return;
@@ -26,15 +24,12 @@ export default function BookingButton({ eventId, userEmail }: BookingButtonProps
     setStatus('idle');
 
     try {
-      // 2. Simulation of Payment Gateway Interaction
       console.log("💳 Initializing secure payment flow...");
       console.log("💳 Redirecting to Stripe for event booking verification...");
       
       await new Promise(resolve => setTimeout(resolve, 1200));
       
       console.log("✅ Payment authorized successfully.");
-
-      // 3. Finalize Booking on Backend using the REAL user's email
       const response = await fetch('http://localhost:8000/api/bookings', {
         method: 'POST',
         headers: {
@@ -43,7 +38,7 @@ export default function BookingButton({ eventId, userEmail }: BookingButtonProps
         body: JSON.stringify({
           event_id: eventId,
           ticket_count: 1, 
-          user_email: userEmail // Replaced the hardcoded demo email
+          user_email: userEmail 
         }),
       });
 

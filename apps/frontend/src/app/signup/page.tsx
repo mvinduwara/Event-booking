@@ -1,4 +1,3 @@
-// apps/frontend/src/app/auth/signup/page.tsx
 "use client";
 
 import { signIn } from "next-auth/react";
@@ -16,7 +15,6 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // This will hit our backend, realize the user doesn't exist, create them in Prisma, and log them in!
     await signIn("credentials", { email, callbackUrl: "/dashboard" });
     setLoading(false);
   };

@@ -1,4 +1,3 @@
-// apps/frontend/src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -11,8 +10,6 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        // In a real app, you'd verify the password here.
-        // For now, we fetch/create the user in our backend.
         const res = await fetch("http://localhost:8000/api/users/auth", {
           method: 'POST',
           body: JSON.stringify(credentials),

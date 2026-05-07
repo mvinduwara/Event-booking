@@ -71,7 +71,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<any
 
       <section className="max-w-7xl mx-auto px-6 pb-24">
         
-        {/* INTERACTIVE FILTERS */}
         <EventFilters categories={categories} />
 
         {events.length === 0 ? (

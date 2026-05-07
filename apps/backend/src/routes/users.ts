@@ -9,32 +9,27 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// POST - Authenticate or Register User
 router.post('/auth', async (req, res) => {
   try {
     const { email } = req.body;
-
-    // 1. Check if user exists
     let user = await prisma.user.findUnique({
       where: { email }
     });
 
-    // 2. If user doesn't exist, create one (Auto-registration on first login)
     if (!user) {
       user = await prisma.user.create({
         data: { 
           email,
-          profile_data: {} // Initial empty profile JSON as per schema
+          profile_data: {} 
         }
       });
       console.log(`👤 New user registered: ${email}`);
     }
 
-    // Return the user object for the NextAuth session
     res.status(200).json({
       id: user.id,
       email: user.email,
-      name: email.split('@')[0] // Dummy name from email
+      name: email.split('@')[0] 
     });
 
   } catch (error) {

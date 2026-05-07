@@ -11,19 +11,15 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// Create a new booking
 router.post('/', async (req, res) => {
   try {
     const { event_id, ticket_count, user_email } = req.body;
 
-    // 1. In a real app, user_id comes from Auth tokens. 
-    // For now, let's find or create a dummy user based on email.
     let user = await prisma.user.findUnique({ where: { email: user_email } });
     if (!user) {
       user = await prisma.user.create({ data: { email: user_email } });
     }
 
-    // 2. Check if the event exists and has enough capacity
     const event = await prisma.event.findUnique({ where: { id: event_id } });
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });
@@ -32,7 +28,6 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Not enough tickets available' });
     }
 
-    // 3. Create the booking and reduce event capacity in a transaction
     const [booking, updatedEvent] = await prisma.$transaction([
       prisma.booking.create({
         data: {
@@ -60,7 +55,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Get bookings for a specific user
 router.get('/user/:email', async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { email: req.params.email } });

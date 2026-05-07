@@ -15,9 +15,7 @@ async function getEventDetails(id: string) {
   }
 }
 
-// FIXED: params is a Promise that must be awaited
 export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap the params promise
   const resolvedParams = await params;
   
   const event = await getEventDetails(resolvedParams.id);
@@ -33,7 +31,6 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <Link href="/" className="text-primary font-medium hover:underline">← Back to Events</Link>
       </nav>
 
-      {/* Added Image support here so the details page also shows your uploaded banner! */}
       {event.image_url && (
         <div className="w-full h-64 md:h-96 relative bg-slate-200">
           <Image src={event.image_url} alt={event.title} fill className="object-cover" />

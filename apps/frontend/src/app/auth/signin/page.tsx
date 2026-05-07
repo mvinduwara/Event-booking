@@ -14,7 +14,6 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Redirects to the homepage or dashboard after successful sign-in
     await signIn("credentials", { email, callbackUrl: "/" });
     setLoading(false);
   };

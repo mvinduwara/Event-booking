@@ -9,7 +9,6 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// Get all venues
 router.get('/', async (req, res) => {
   try {
     const venues = await prisma.venue.findMany();
@@ -19,7 +18,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a new venue
 router.post('/', async (req, res) => {
   try {
     const { name, address, capacity, facilities } = req.body;

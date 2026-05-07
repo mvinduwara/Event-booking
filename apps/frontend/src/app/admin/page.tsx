@@ -161,22 +161,19 @@ export default function AdminDashboard() {
       body: formData,
     });
     const data = await res.json();
-    return data.url; // Returns the local URL
+    return data.url; 
   };
 
   const handleEventSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     
-    // 1. Upload image if exists
     const imageUrl = await uploadImage();
 
-    // 2. Prepare event data
     const formData = new FormData(e.currentTarget);
     const eventData = Object.fromEntries(formData.entries());
-    if (imageUrl) eventData.image_url = imageUrl; // Attach image URL to DB payload
-
-    // 3. Save Event
+    if (imageUrl) eventData.image_url = imageUrl; 
+    
     await fetch('http://localhost:8000/api/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
