@@ -1,7 +1,7 @@
 // apps/frontend/src/app/events/[id]/page.tsx
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import BookingButton from "@/components/BookingButton"; 
+import BookingButton from "@/components/ui/BookingButton";
 import Link from "next/link";
 
 async function getEventDetails(id: string) {
