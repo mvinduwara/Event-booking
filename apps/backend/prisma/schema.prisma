@@ -21,6 +21,7 @@ model Event {
   venue_id    String
   datetime    DateTime
   capacity    Int
+  image_url   String?
   venue       Venue     @relation(fields: [venue_id], references: [id])
   bookings    Booking[]
 }
@@ -31,6 +32,7 @@ model Venue {
   address    String
   capacity   Int
   facilities String[]
+  image_url  String?
   events     Event[]
 }
 
