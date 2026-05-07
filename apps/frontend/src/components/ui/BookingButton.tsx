@@ -6,12 +6,11 @@ import { useRouter } from 'next/navigation';
 
 interface BookingButtonProps {
   eventId: string;
-  userEmail?: string | null; 
+  userEmail?: string | null;
 }
 
 export default function BookingButton({ eventId, userEmail }: BookingButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const router = useRouter();
 
   const handleBooking = async () => {
@@ -21,40 +20,29 @@ export default function BookingButton({ eventId, userEmail }: BookingButtonProps
     }
 
     setIsLoading(true);
-    setStatus('idle');
 
     try {
-      console.log("💳 Initializing secure payment flow...");
-      console.log("💳 Redirecting to Stripe for event booking verification...");
-      
-      await new Promise(resolve => setTimeout(resolve, 1200));
-      
-      console.log("✅ Payment authorized successfully.");
-      const response = await fetch('http://localhost:8000/api/bookings', {
+      const response = await fetch('http://localhost:8000/api/bookings/create-checkout-session', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           event_id: eventId,
-          ticket_count: 1, 
-          user_email: userEmail 
+          user_email: userEmail
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Backend failed to confirm booking after payment.');
+      if (!response.ok) throw new Error('Failed to create payment session');
+
+      const data = await response.json();
+      
+      if (data.url) {
+        window.location.href = data.url; 
       }
-
-      const result = await response.json();
-      console.log("🎉 Booking confirmed:", result);
-      setStatus('success');
-
+      
     } catch (error) {
-      console.error("❌ Booking process failed:", error);
-      setStatus('error');
-    } finally {
+      console.error("❌ Checkout failed:", error);
       setIsLoading(false);
+      alert("Failed to initialize payment. Please try again.");
     }
   };
 
@@ -62,13 +50,9 @@ export default function BookingButton({ eventId, userEmail }: BookingButtonProps
     <Button 
       className="w-full transition-all duration-200" 
       onClick={handleBooking} 
-      disabled={isLoading || status === 'success'}
-      variant={status === 'success' ? 'outline' : status === 'error' ? 'destructive' : 'default'}
+      disabled={isLoading}
     >
-      {isLoading && 'Processing Payment...'}
-      {status === 'idle' && !isLoading && 'Book Ticket'}
-      {status === 'success' && 'Ticket Confirmed! 🎉'}
-      {status === 'error' && 'Retry Booking'}
+      {isLoading ? 'Redirecting to Checkout...' : 'Secure Checkout ($50.00)'}
     </Button>
   );
 }
