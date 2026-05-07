@@ -9,6 +9,7 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import bookingRoutes from './routes/bookings';
+import venueRoutes from './routes/venues';
 
 // 2. NOW IMPORT ROUTES (Database URL is safely loaded)
 import eventRoutes from './routes/events';
@@ -34,7 +35,7 @@ app.get('/api/health', (req, res) => {
 // Mount the event routes
 app.use('/api/events', eventRoutes);
 app.use('/api/bookings', bookingRoutes);
-
+app.use('/api/venues', venueRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is successfully running on port ${PORT}`);
