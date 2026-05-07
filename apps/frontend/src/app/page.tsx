@@ -1,4 +1,3 @@
-// apps/frontend/src/app/page.tsx
 import Link from 'next/link';
 import Image from 'next/image';
 import { getServerSession } from "next-auth";
@@ -19,7 +18,7 @@ async function getEvents(searchParams: any) {
     return res.json();
   } catch (error) {
     console.error("🚨 Backend connection failed (getEvents):", error);
-    return []; // Return empty array if backend is down
+    return []; 
   }
 }
 
@@ -30,12 +29,11 @@ async function getCategories() {
     return res.json();
   } catch (error) {
     console.error("🚨 Backend connection failed (getCategories):", error);
-    return []; // Return empty array if backend is down
+    return []; 
   }
 }
 
 export default async function Home({ searchParams }: { searchParams: Promise<any> }) {
-  // Resolve the searchParams promise for Next.js 15+
   const resolvedParams = await searchParams;
   
   const events = await getEvents(resolvedParams);
