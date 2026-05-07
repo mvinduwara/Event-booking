@@ -1,25 +1,42 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import dotenv from 'dotenv';
+import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { Pool } from 'pg'; // <-- New import
-import { PrismaPg } from '@prisma/adapter-pg'; // <-- New import
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-dotenv.config();
+const router = Router();
 
-// --- NEW PRISMA V7 INITIALIZATION ---
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
-// ------------------------------------
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+router.get('/', async (req, res) => {
+  try {
+    const events = await prisma.event.findMany({
+      include: { venue: true }
+    });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch events' });
+  }
+});
 
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
+router.post('/', async (req, res) => {
+  try {
+    const { title, description, venue_id, datetime, capacity } = req.body;
+    const newEvent = await prisma.event.create({
+      data: {
+        title,
+        description,
+        venue_id,
+        datetime: new Date(datetime),
+        capacity
+      }
+    });
+    res.status(201).json(newEvent);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create event' });
+  }
+});
 
-// ... rest of your routes ...
+export default router;
