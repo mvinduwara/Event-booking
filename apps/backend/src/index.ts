@@ -1,6 +1,4 @@
-// apps/backend/src/index.ts
 import dotenv from 'dotenv';
-// MUST be loaded first
 dotenv.config();
 
 import express from 'express';

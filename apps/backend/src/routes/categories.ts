@@ -1,4 +1,3 @@
-// apps/backend/src/routes/categories.ts
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
