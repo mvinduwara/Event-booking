@@ -40,7 +40,6 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      {/* Navigation Bar with Auth logic */}
       <nav className="w-full bg-white border-b px-6 py-4 flex justify-between items-center sticky top-0 z-10">
         <h1 className="text-2xl font-bold text-primary">Eventify</h1>
         <div className="space-x-4 flex items-center">
@@ -67,7 +66,6 @@ export default async function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="py-20 px-6 text-center max-w-4xl mx-auto">
         <h2 className="text-5xl font-extrabold tracking-tight mb-6 text-slate-900">
           Discover and Book Amazing Events
@@ -80,7 +78,6 @@ export default async function Home() {
         </Button>
       </section>
 
-      {/* Events Grid */}
       <section className="max-w-7xl mx-auto px-6 pb-20">
         <div className="flex justify-between items-end mb-8">
           <h3 className="text-3xl font-bold text-slate-900">Upcoming Events</h3>
@@ -120,7 +117,7 @@ export default async function Home() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-2 pt-4">
-                  <BookingButton eventId={event.id} />
+                  <BookingButton eventId={event.id} userEmail={session?.user?.email} />
                   <Link href={`/events/${event.id}`} className="w-full">
                     <Button variant="outline" className="w-full border-slate-200 hover:bg-slate-50">
                       View Details
