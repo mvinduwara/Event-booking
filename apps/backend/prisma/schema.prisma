@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  profile_data Json?
+  created_at   DateTime  @default(now())
+  bookings     Booking[]
+}
+
+model Event {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  venue_id    String
+  datetime    DateTime
+  capacity    Int
+  venue       Venue     @relation(fields: [venue_id], references: [id])
+  bookings    Booking[]
+}
+
+model Venue {
+  id         String   @id @default(uuid())
+  name       String
+  address    String
+  capacity   Int
+  facilities String[]
+  events     Event[]
+}
+
+model Booking {
+  id           String    @id @default(uuid())
+  user_id      String
+  event_id     String
+  ticket_count Int
+  status       String    @default("PENDING")
+  user         User      @relation(fields: [user_id], references: [id])
+  event        Event     @relation(fields: [event_id], references: [id])
+  payments     Payment[]
+}
+
+model Payment {
+  id             String  @id @default(uuid())
+  booking_id     String
+  amount         Float
+  payment_method String
+  status         String  @default("PENDING")
+  booking        Booking @relation(fields: [booking_id], references: [id])
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+}
