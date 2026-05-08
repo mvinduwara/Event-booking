@@ -16,18 +16,15 @@ export default function AdminDashboard() {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
-    // Fetch venues for the dropdown
     fetch('http://localhost:8000/api/venues')
       .then(res => res.json())
       .then(data => setVenues(data));
       
-    // Fetch categories for the dropdown
     fetch('http://localhost:8000/api/categories')
       .then(res => res.json())
       .then(data => setCategories(data));
   }, []);
 
-  // Helper to upload image first
   const uploadImage = async () => {
     if (!imageFile) return null;
     const formData = new FormData();
@@ -45,22 +42,18 @@ export default function AdminDashboard() {
   const handleEventSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    
-    // 1. Upload image if exists
+
     const imageUrl = await uploadImage();
 
-    // 2. Prepare event data
     const formData = new FormData(e.currentTarget);
     const eventData = Object.fromEntries(formData.entries());
     
     if (imageUrl) eventData.image_url = imageUrl;
     
-    // Clean up empty category selection
     if (!eventData.category_id || eventData.category_id === 'unassigned') {
       delete eventData.category_id;
     }
 
-    // 3. Save Event
     await fetch('http://localhost:8000/api/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -98,8 +91,6 @@ export default function AdminDashboard() {
           <TabsTrigger value="events">Manage Events</TabsTrigger>
           <TabsTrigger value="venues">Manage Venues</TabsTrigger>
         </TabsList>
-
-        {/* --- Create Event Form --- */}
         <TabsContent value="events">
           <Card>
             <CardHeader>
@@ -172,8 +163,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-
-        {/* --- Create Venue Form --- */}
+        
         <TabsContent value="venues">
           <Card>
             <CardHeader>
