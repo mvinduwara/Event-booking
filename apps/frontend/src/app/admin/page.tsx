@@ -42,10 +42,12 @@ export default function AdminDashboard() {
   const handleEventSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
+    
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
+    
     const imageUrl = await uploadImage();
 
-    const formData = new FormData(e.currentTarget);
     const eventData = Object.fromEntries(formData.entries());
     
     if (imageUrl) eventData.image_url = imageUrl;
@@ -68,7 +70,9 @@ export default function AdminDashboard() {
   const handleVenueSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const formData = new FormData(e.currentTarget);
+    
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     const data = Object.fromEntries(formData.entries());
 
     await fetch('http://localhost:8000/api/venues', {
@@ -91,6 +95,7 @@ export default function AdminDashboard() {
           <TabsTrigger value="events">Manage Events</TabsTrigger>
           <TabsTrigger value="venues">Manage Venues</TabsTrigger>
         </TabsList>
+
         <TabsContent value="events">
           <Card>
             <CardHeader>
@@ -163,7 +168,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="venues">
           <Card>
             <CardHeader>
