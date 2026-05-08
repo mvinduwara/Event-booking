@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -44,6 +45,12 @@ export default function SignInPage() {
           </form>
           <div className="mt-4 text-center text-sm text-slate-500">
             Secure authentication powered by NextAuth.js
+          </div>
+          <div className="mt-6 text-center text-sm text-slate-500">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-primary hover:underline font-medium">
+              Sign up
+            </Link>
           </div>
         </CardContent>
       </Card>

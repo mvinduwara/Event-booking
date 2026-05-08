@@ -59,7 +59,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<any
           ) : (
             <>
               <Link href="/auth/signin"><Button variant="ghost">Log in</Button></Link>
-              <Link href="/auth/signup"><Button>Sign up</Button></Link>
+              <Link href="/signup"><Button>Sign up</Button></Link>
             </>
           )}
         </div>
