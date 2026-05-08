@@ -1,4 +1,3 @@
-// apps/frontend/src/app/dashboard/DashboardUI.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { jsPDF } from "jspdf"; // PDF Generator
+import { jsPDF } from "jspdf";
+import SignOutButton from "@/components/ui/SignOutButton";
 
 export default function DashboardUI({ userEmail }: { userEmail: string }) {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -18,12 +18,10 @@ export default function DashboardUI({ userEmail }: { userEmail: string }) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    // Fetch Bookings
     fetch(`http://localhost:8000/api/bookings/user/${userEmail}`)
       .then(res => res.json())
       .then(data => setBookings(data));
 
-    // Fetch Profile
     fetch(`http://localhost:8000/api/users/${userEmail}`)
       .then(res => res.json())
       .then(data => {
@@ -52,8 +50,7 @@ export default function DashboardUI({ userEmail }: { userEmail: string }) {
   const downloadTicket = (booking: any) => {
     const doc = new jsPDF();
     
-    // Add Graphics and Text to the PDF
-    doc.setFillColor(37, 99, 235); // Blue header
+    doc.setFillColor(37, 99, 235);
     doc.rect(0, 0, 210, 40, 'F');
     
     doc.setTextColor(255, 255, 255);
@@ -75,7 +72,6 @@ export default function DashboardUI({ userEmail }: { userEmail: string }) {
     doc.line(20, 140, 190, 140);
     doc.text("Please present this ticket (digital or printed) at the entrance.", 20, 150);
 
-    // Save the PDF securely to the user's computer
     doc.save(`Eventify-Ticket-${booking.event.title.replace(/\s+/g, '-')}.pdf`);
   };
 
@@ -88,7 +84,10 @@ export default function DashboardUI({ userEmail }: { userEmail: string }) {
           <h1 className="text-4xl font-extrabold text-slate-900">User Dashboard</h1>
           <p className="text-slate-500 mt-2">Welcome back, {profile.name || userEmail}</p>
         </div>
-        <Link href="/"><Button variant="outline">Browse Events</Button></Link>
+        <div className="flex gap-4">
+          <Link href="/"><Button variant="outline">Browse Events</Button></Link>
+          <SignOutButton />
+        </div>
       </header>
       
       <Tabs defaultValue="bookings">
@@ -125,7 +124,6 @@ export default function DashboardUI({ userEmail }: { userEmail: string }) {
                         <p className="text-slate-400 font-mono text-xs mt-1">ID: {booking.id}</p>
                       </div>
                       
-                      {/* PDF DOWNLOAD BUTTON */}
                       {booking.status === 'CONFIRMED' && (
                         <Button onClick={() => downloadTicket(booking)} className="bg-slate-900 hover:bg-slate-800">
                           📄 Download PDF Ticket

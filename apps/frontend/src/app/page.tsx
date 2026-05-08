@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import BookingButton from '@/components/ui/BookingButton';
 import EventFilters from '@/components/EventFilters';
+import SignOutButton from '@/components/ui/SignOutButton';
 
 async function getEvents(searchParams: any) {
   try {
@@ -17,8 +18,7 @@ async function getEvents(searchParams: any) {
     if (!res.ok) return [];
     return res.json();
   } catch (error) {
-    console.error("🚨 Backend connection failed (getEvents):", error);
-    return []; 
+    return [];
   }
 }
 
@@ -28,14 +28,12 @@ async function getCategories() {
     if (!res.ok) return [];
     return res.json();
   } catch (error) {
-    console.error("🚨 Backend connection failed (getCategories):", error);
-    return []; 
+    return [];
   }
 }
 
 export default async function Home({ searchParams }: { searchParams: Promise<any> }) {
   const resolvedParams = await searchParams;
-  
   const events = await getEvents(resolvedParams);
   const categories = await getCategories();
   const session = await getServerSession();
@@ -53,6 +51,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<any
               <Link href="/admin" className="text-sm font-medium text-slate-500 hover:text-primary transition-colors">
                 Admin
               </Link>
+              <span className="text-sm text-slate-400 pl-4 border-l">
+                {session.user?.email}
+              </span>
+              <SignOutButton />
             </>
           ) : (
             <>
@@ -70,9 +72,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<any
       </section>
 
       <section className="max-w-7xl mx-auto px-6 pb-24">
-        
         <EventFilters categories={categories} />
-
         {events.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300">
             <p className="text-slate-500">No events found matching your search, or backend is offline.</p>
